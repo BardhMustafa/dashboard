@@ -1,11 +1,9 @@
+import { useGetArticles } from './services/api/generated/endpoints';
 
-function App() {
+const App = () => {
+  const { data, isLoading } = useGetArticles();
+  console.log(data);
+  return isLoading ? <div>Loading...</div> : <div>Bardh</div>;
+};
 
-  return (
-    <>
-   Dashboard
-    </>
-  )
-}
-
-export default App
+export default App;
