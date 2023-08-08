@@ -1,8 +1,11 @@
 import { create } from 'zustand';
-import { IUserAuth } from '@/shared/types/user/auth';
+import { UserStoreProps } from '@/shared/types/user/auth';
 
- export const userStore = create<IUserAuth>((set) => ({
+ export const userStore = create<UserStoreProps>(() => ({
   isAuthenticated: true,
   accessToken: '',
-  refreshToken: '',
+  username: '',
+  email: '',
+  bio:'',
+  image:''
 }));
