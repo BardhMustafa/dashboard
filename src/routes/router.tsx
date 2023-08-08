@@ -1,10 +1,11 @@
 import App from '@/App';
 import { createBrowserRouter } from 'react-router-dom';
 import Login from '@/pages/auth/Login';
-import Protected from './Protected';
+import Protected from './ProtectedRoute';
 import Profile from '@/pages/profile/Profile';
 import NotFound from '@/pages/NotFound';
 import Articles from '@/pages/articles/Articles';
+import PrivateRoute from './PrivateRoute';
 
 export const router = createBrowserRouter([
   {
@@ -17,14 +18,19 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />,
+
+    element: (
+      <Protected>
+        <Login />
+      </Protected>
+    ),
   },
   {
     path: '/dashboard',
     element: (
-      <Protected>
+      <PrivateRoute>
         <Profile />
-      </Protected>
+      </PrivateRoute>
     ),
   },
   {
