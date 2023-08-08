@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 const Login = () => {
   const { isAuthenticated } = userStore();
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
