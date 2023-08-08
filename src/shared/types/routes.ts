@@ -1,3 +1,3 @@
-export interface IProtectedProps {
+export type ProtectedProps= {
   children: JSX.Element;
 }
