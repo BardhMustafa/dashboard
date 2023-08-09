@@ -1,11 +1,16 @@
 import { create } from 'zustand';
-import { UserStoreProps } from '@/shared/types/user/auth';
-
- export const userStore = create<UserStoreProps>(() => ({
+type UserStoreProps = {
+  isAuthenticated: boolean;
+  accessToken: string;
+  user: { username: string; email: string; bio: string; image: string };
+};
+export const userStore = create<UserStoreProps>(() => ({
   isAuthenticated: true,
   accessToken: '',
-  username: '',
-  email: '',
-  bio:'',
-  image:''
+  user: {
+    username: '',
+    email: '',
+    bio: '',
+    image: '',
+  },
 }));
