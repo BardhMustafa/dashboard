@@ -1,8 +1,10 @@
-import { ProtectedProps } from '@/shared/types/routes';
-import { userStore } from '@/store/store';
 import { Navigate } from 'react-router';
+import { userStore } from '@/store/store';
 
-const ProtectedRoute = ({ children }: ProtectedProps) => {
+ type ProtectedRouteProps = {
+  children: JSX.Element;
+};
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = userStore();
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
