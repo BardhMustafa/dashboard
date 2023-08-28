@@ -1,13 +1,13 @@
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 
-type HeaderItemProps = {
+type HeaderButtonProps = {
   isHeaderOpen: boolean;
   icon: JSX.Element;
   text: string;
 };
 
-const HeaderItem = ({ isHeaderOpen, icon, text }: HeaderItemProps) => {
+const HeaderButton = ({ isHeaderOpen, icon, text }: HeaderButtonProps) => {
   return (
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
@@ -16,6 +16,7 @@ const HeaderItem = ({ isHeaderOpen, icon, text }: HeaderItemProps) => {
           justifyContent: isHeaderOpen ? 'initial' : 'center',
           px: 2.5,
         }}
+        onClick={() => {}}
       >
         <ListItemIcon
           sx={{
@@ -32,4 +33,4 @@ const HeaderItem = ({ isHeaderOpen, icon, text }: HeaderItemProps) => {
   );
 };
 
-export default HeaderItem;
+export default HeaderButton;

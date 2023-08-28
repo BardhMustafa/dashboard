@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router';
-import { userStore } from '@/store/store';
+import { userStore } from '@/store/userStore';
 
- type ProtectedRouteProps = {
+type ProtectedRouteProps = {
   children: JSX.Element;
 };
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {

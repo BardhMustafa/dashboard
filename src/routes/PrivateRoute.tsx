@@ -1,4 +1,4 @@
-import { userStore } from '@/store/store';
+import { userStore } from '@/store/userStore';
 import { Navigate } from 'react-router';
 
 type PrivateRouteProps = {

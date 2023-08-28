@@ -15,9 +15,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { userStore } from '@/store/store';
+import { userStore } from '@/store/userStore';
 import HeaderItem from './HeaderItem';
 import LoginIcon from '@mui/icons-material/Login';
+import HeaderButton from './HeaderButton';
 
 const drawerWidth = 240;
 
@@ -79,7 +80,7 @@ export default function Header() {
         </DrawerHeader>
 
         <List>
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <HeaderItem isHeaderOpen={open} icon={<LoginIcon />} text="Login" />
           ) : (
             <>
@@ -98,7 +99,7 @@ export default function Header() {
                 icon={<AddCircleIcon />}
                 text="Add Post"
               />
-              <HeaderItem
+              <HeaderButton
                 isHeaderOpen={open}
                 icon={<LogoutIcon />}
                 text="Logout"

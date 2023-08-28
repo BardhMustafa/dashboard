@@ -11,9 +11,9 @@
     "generate-api": "orval "
   },
   "dependencies": {
-    "@fontsource/roboto": "^5.0.6",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.3",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "^5.12.0",
     "@tanstack/react-query": "^4.29.15",
     "@tanstack/react-query-devtools": "^4.32.1",
@@ -31,7 +31,6 @@
     "react-router-dom": "^6.14.2",
     "styled-components": "^6.0.6",
     "yup": "^1.2.0",
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
