@@ -80,21 +80,29 @@ export default function Header() {
         </DrawerHeader>
 
         <List>
-          {isAuthenticated ? (
-            <HeaderItem isHeaderOpen={open} icon={<LoginIcon />} text="Login" />
+          {!isAuthenticated ? (
+            <HeaderItem
+              href="/login"
+              isHeaderOpen={open}
+              icon={<LoginIcon />}
+              text="Login"
+            />
           ) : (
             <>
               <HeaderItem
+                href="/dashboard"
                 isHeaderOpen={open}
                 icon={<AccountCircleIcon />}
-                text="Admin"
+                text="Admind"
               />
               <HeaderItem
+                href="/articles"
                 isHeaderOpen={open}
                 icon={<FeedIcon />}
                 text="Posts"
               />
               <HeaderItem
+                href="/add-post"
                 isHeaderOpen={open}
                 icon={<AddCircleIcon />}
                 text="Add Post"
