@@ -33,7 +33,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Header() {
   const theme = useTheme();
-  const { isAuthenticated } = userStore();
+  const { isAuthenticated, logout } = userStore();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -108,6 +108,7 @@ export default function Header() {
                 text="Add Post"
               />
               <HeaderButton
+                onClick={logout}
                 isHeaderOpen={open}
                 icon={<LogoutIcon />}
                 text="Logout"
