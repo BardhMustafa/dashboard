@@ -1,4 +1,9 @@
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  StyledComponentProps,
+} from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import { NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -9,13 +14,13 @@ type HeaderItemProps = {
   text: string;
   href: string;
 };
-const CustomNavLink = styled(NavLink)`
+
+const CustomNavLink = styled(NavLink)<StyledComponentProps>`
   text-decoration: none;
   color: inherit;
 `;
 
 const HeaderItem = ({ isHeaderOpen, icon, text, href }: HeaderItemProps) => {
-  console.log(href);
   return (
     <CustomNavLink to={href}>
       <ListItem disablePadding sx={{ display: 'block' }}>

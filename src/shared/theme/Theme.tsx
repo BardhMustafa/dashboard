@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material';
-import { ThemeProvider } from 'styled-components';
+import { rootShouldForwardProp } from '@mui/material/styles/styled';
+import { StyleSheetManager, ThemeProvider } from 'styled-components';
 
 const Theme = ({ children }: { children: JSX.Element }) => {
   const customTheme = createTheme({
@@ -15,7 +16,11 @@ const Theme = ({ children }: { children: JSX.Element }) => {
       fontFamily: "'Poppins', sans-serif",
     },
   });
-  return <ThemeProvider theme={customTheme}>{children}</ThemeProvider>;
+  return (
+    <StyleSheetManager shouldForwardProp={rootShouldForwardProp}>
+      <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
+    </StyleSheetManager>
+  );
 };
 
 export default Theme;

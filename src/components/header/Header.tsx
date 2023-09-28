@@ -3,14 +3,12 @@ import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { AppBar, Drawer } from './Header.style';
-import { Typography } from '@mui/material';
+import { StyledComponentProps, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -20,13 +18,10 @@ import HeaderItem from './HeaderItem';
 import LoginIcon from '@mui/icons-material/Login';
 import HeaderButton from './HeaderButton';
 
-const drawerWidth = 240;
-
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')<StyledComponentProps>(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
-
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
 }));
@@ -45,7 +40,6 @@ export default function Header() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -93,7 +87,7 @@ export default function Header() {
                 href="/dashboard"
                 isHeaderOpen={open}
                 icon={<AccountCircleIcon />}
-                text="Admind"
+                text="Admin"
               />
               <HeaderItem
                 href="/articles"
