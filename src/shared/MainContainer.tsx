@@ -6,7 +6,7 @@ import { StyledComponentProps } from '@mui/material';
 
 export const Container = styled(Box)<StyledComponentProps>`
   margin-left: ${({ theme }) => `calc(${theme.spacing(7)})`};
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   padding: ${({ theme }) => theme.spacing(3)};
   display: flex;
   justify-content: center;

@@ -2,14 +2,19 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import MainContainer from '@/shared/MainContainer';
 import { ValidationSchemaLogin } from '@/shared/validation/schema/Login';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import {
-  getLoginMutationOptions,
-  login,
-  useLogin,
-} from '@/services/api/generated/endpoints';
+  Box,
+  Button,
+  FormHelperText,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { login } from '@/services/api/generated/endpoints';
 import { userStore } from '@/store/userStore';
-import { Navigate } from 'react-router-dom';
+import { Form, Navigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import BackDropLoader from '@/components/common/BackDropLoader';
 
 const Login = () => {
   const initialUserLoginData = {
@@ -17,7 +22,27 @@ const Login = () => {
     password: '',
   };
   const { setAccessToken } = userStore();
-  const { mutate, data, isLoading, isError, isSuccess } = useLogin();
+  const [errorContainer, setErrorContainer] = useState<string | null>(null);
+
+  const { isLoading, mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      setAccessToken(response.user.token);
+      
+    },
+    onError: (error) => {
+      const errorResponse = error as any;
+      const responseError =
+        errorResponse.response?.data?.errors?.['email or password']?.join('');
+      setErrorContainer(
+        `Email or Password ${responseError}` || 'An error occurred'
+      );
+      setTimeout(() => {
+        setErrorContainer(null);
+      }, 5000);
+    },
+  });
+
   const formik = useFormik({
     initialValues: initialUserLoginData,
     validationSchema: ValidationSchemaLogin,
@@ -26,18 +51,13 @@ const Login = () => {
         email: values.email,
         password: values.password,
       };
-      mutate({
-        data: {
-          user,
-        },
-      });
-      isSuccess && setAccessToken(data?.user?.token);
+      mutate({ user });
       <Navigate to="/dashboard" />;
     },
   });
-
   return (
     <MainContainer>
+      <BackDropLoader open={isLoading} />
       <Grid
         display="flex"
         width="300px"
@@ -62,22 +82,37 @@ const Login = () => {
             name="email"
             error={formik.touched.email && Boolean(formik.errors.email)}
             value={formik.values.email}
+            helperText={formik.touched.email && formik.errors.email}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
           <TextField
             label="Password"
-            type={'password'}
             variant="outlined"
+            type={'password'}
             margin="normal"
             required
             fullWidth
             id="password"
             name="password"
-            error={formik.touched.email && Boolean(formik.errors.email)}
+            error={formik.touched.password && Boolean(formik.errors.password)}
             value={formik.values.password}
+            helperText={formik.touched.password && formik.errors.password}
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
-          <Button fullWidth type="submit" color="primary" variant="contained">
+          {errorContainer && (
+            <Typography color="error" margin={1}>
+              {errorContainer}
+            </Typography>
+          )}
+          <Button
+            fullWidth
+            size="large"
+            type="submit"
+            color="primary"
+            variant="contained"
+          >
             Sign In
           </Button>
         </form>

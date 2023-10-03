@@ -1,3 +1,4 @@
+import { setAuthToken } from '@/services/api/mutator/axios-instance';
 import { create, StateCreator } from 'zustand';
 import { createJSONStorage, persist, PersistOptions } from 'zustand/middleware';
 
@@ -18,8 +19,11 @@ type MyPersist = (
     (set, get): AuthStore => ({
       accessToken: null,
       isAuthenticated: false,
-      setAccessToken: (token: string) => set((state) => ({ accessToken: token, 
-        isAuthenticated: true })),
+      setAccessToken: (token: string) => {
+        set((state) => ({ accessToken: token, 
+          isAuthenticated: true }));
+          setAuthToken(token)
+        },
       logout: () => set((state) => ({ accessToken: null, isAuthenticated: false })),
     }),
     {
