@@ -14,7 +14,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { userStore } from '@/store/userStore';
-import HeaderItem from './HeaderItem';
+import HeaderItem, { HeaderItemProps } from './HeaderItem';
 import LoginIcon from '@mui/icons-material/Login';
 import HeaderButton from './HeaderButton';
 
@@ -83,24 +83,15 @@ export default function Header() {
             />
           ) : (
             <>
-              <HeaderItem
-                href="/dashboard"
-                isHeaderOpen={open}
-                icon={<AccountCircleIcon />}
-                text="Admin"
-              />
-              <HeaderItem
-                href="/articles"
-                isHeaderOpen={open}
-                icon={<FeedIcon />}
-                text="Posts"
-              />
-              <HeaderItem
-                href="/add-post"
-                isHeaderOpen={open}
-                icon={<AddCircleIcon />}
-                text="Add Post"
-              />
+              {PUBLIC_MENU.map((item: HeaderItemProps) => (
+                <HeaderItem
+                  key={item.text}
+                  href={item.href}
+                  isHeaderOpen={open}
+                  icon={item.icon}
+                  text={item.text}
+                />
+              ))}
               <HeaderButton
                 onClick={logout}
                 isHeaderOpen={open}
@@ -114,3 +105,20 @@ export default function Header() {
     </Box>
   );
 }
+const PUBLIC_MENU: HeaderItemProps[] = [
+  {
+    href: '/dashboard',
+    icon: <AccountCircleIcon />,
+    text: 'Admin',
+  },
+  {
+    href: '/articles',
+    icon: <FeedIcon />,
+    text: 'Posts',
+  },
+  {
+    href: '/add-post',
+    icon: <AddCircleIcon />,
+    text: 'Add Post',
+  },
+];

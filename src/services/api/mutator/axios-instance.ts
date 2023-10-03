@@ -1,7 +1,9 @@
+
+
 import Axios, { AxiosRequestConfig } from 'axios';
 
-// Define your custom Axios instance with the base URL
-export const AXIOS_INSTANCE = Axios.create({ baseURL: 'https://api.realworld.io/api' });
+
+export const AXIOS_INSTANCE = Axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL});
 
 // Function to set the JWT token in the Axios instance headers
 export const setAuthToken = (token: string) => {
