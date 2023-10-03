@@ -5,7 +5,7 @@ type UserStoreProps = {
   user: { username: string; email: string; bio: string; image: string };
 };
 export const userStore = create<UserStoreProps>(() => ({
-  isAuthenticated: false,
+  isAuthenticated: true,
   accessToken: '',
   user: {
     username: '',

@@ -8,8 +8,8 @@ import ListItem from '@mui/material/ListItem';
 import { NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-type HeaderItemProps = {
-  isHeaderOpen: boolean;
+export type HeaderItemProps = {
+  isHeaderOpen?: boolean;
   icon: JSX.Element;
   text: string;
   href: string;
