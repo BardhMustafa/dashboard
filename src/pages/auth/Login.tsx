@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import MainContainer from '@/shared/MainContainer';
-import { ValidationSchemaLogin } from '@/shared/validation/schema/Login';
+
 import {
   Box,
   Button,
@@ -10,13 +9,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { login } from '@/services/api/generated/endpoints';
 
 import { Form, Navigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import BackDropLoader from '@/components/common/BackDropLoader';
-import { setAuthorizationHeaders } from '@/services/api/mutator/axios-instance';
-import { authStore } from '@/store/authStore';
+import { authStore } from 'src/store/authStore';
+import { login } from 'src/services/api/generated/endpoints';
+import { setAuthorizationHeaders } from 'src/services/api/mutator/axios-instance';
+import MainContainer from 'src/shared/MainContainer';
+import BackDropLoader from 'src/components/common/BackDropLoader';
+import { ValidationSchemaLogin } from 'src/shared/validation/schema/Login';
 
 const Login = () => {
   const initialUserLoginData = {

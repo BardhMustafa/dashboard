@@ -14,10 +14,11 @@ import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import HeaderItem, { HeaderItemProps } from './HeaderItem';
 import LoginIcon from '@mui/icons-material/Login';
+
+import { authStore } from '../../store/authStore';
+import HeaderItem, { HeaderItemProps } from './HeaderItem';
 import HeaderButton from './HeaderButton';
-import { authStore } from '@/store/authStore';
 
 const DrawerHeader = styled('div')<StyledComponentProps>(({ theme }) => ({
   display: 'flex',

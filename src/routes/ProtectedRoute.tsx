@@ -1,5 +1,5 @@
-import { authStore } from '@/store/authStore';
 import { Navigate } from 'react-router';
+import { authStore } from 'src/store/authStore';
 
 type ProtectedRouteProps = {
   children: JSX.Element;

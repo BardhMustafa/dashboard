@@ -4,10 +4,10 @@ import Axios, {
   AxiosResponse,
   CancelTokenSource,
 } from 'axios';
+import { authStore } from 'src/store/authStore';
+import { isTokenExpired } from 'src/helpers/tokenValidation';
 
-import { isTokenExpired } from '@/helpers/tokenValidation';
-import axios from 'axios';
-import { authStore } from '@/store/authStore';
+
 
 interface AccessToken {
   exp: number;
