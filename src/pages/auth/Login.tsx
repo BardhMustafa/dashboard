@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Form, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { authStore } from 'src/store/authStore';
 import { login } from 'src/services/api/generated/endpoints';
