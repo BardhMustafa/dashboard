@@ -1,11 +1,10 @@
-
-function App() {
-
+import Header from './components/header/Header';
+const App = () => {
   return (
     <>
-   Dashboard
+      <Header />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
