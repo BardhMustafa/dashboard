@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { authStore } from 'src/store/authStore';
 
 type ProtectedRouteProps = {
@@ -6,8 +6,9 @@ type ProtectedRouteProps = {
 };
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = authStore();
+  const navigate = useNavigate();
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    navigate('/');
   }
   return children;
 };

@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { authStore } from 'src/store/authStore';
 import { login } from 'src/services/api/generated/endpoints';
@@ -20,6 +20,8 @@ import BackDropLoader from 'src/components/common/BackDropLoader';
 import { ValidationSchemaLogin } from 'src/shared/validation/schema/Login';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const initialUserLoginData = {
     email: '',
     password: '',
@@ -55,7 +57,7 @@ const Login = () => {
         password: values.password,
       };
       mutate({ user });
-      <Navigate to="/dashboard" />;
+      navigate('/dashboard');
     },
   });
   return (

@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { authStore } from 'src/store/authStore';
 
 type PrivateRouteProps = {
@@ -6,8 +6,9 @@ type PrivateRouteProps = {
 };
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { isAuthenticated } = authStore();
+  const navigate = useNavigate();
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    navigate('/');
   }
   return children;
 };
