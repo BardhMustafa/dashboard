@@ -11,24 +11,26 @@ import {
   Typography,
 } from '@mui/material';
 import { login } from '@/services/api/generated/endpoints';
-import { userStore } from '@/store/userStore';
+
 import { Form, Navigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import BackDropLoader from '@/components/common/BackDropLoader';
+import { setAuthorizationHeaders } from '@/services/api/mutator/axios-instance';
+import { authStore } from '@/store/authStore';
 
 const Login = () => {
   const initialUserLoginData = {
     email: '',
     password: '',
   };
-  const { setAccessToken } = userStore();
+  const { setAccessToken } = authStore();
   const [errorContainer, setErrorContainer] = useState<string | null>(null);
 
   const { isLoading, mutate } = useMutation({
     mutationFn: login,
     onSuccess: (response) => {
-      setAccessToken(response.user.token);
-      
+      setAccessToken(response.data.user.token);
+      setAuthorizationHeaders(response.data.user.token);
     },
     onError: (error) => {
       const errorResponse = error as any;

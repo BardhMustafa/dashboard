@@ -44,6 +44,14 @@ import deleteArticleFavoriteMutator from '../mutator/axios-instance';
 import getTagsMutator from '../mutator/axios-instance';
 
 
+// eslint-disable-next-line
+  type SecondParameter<T extends (...args: any) => any> = T extends (
+  config: any,
+  args: infer P,
+) => any
+  ? P
+  : never;
+
 
   /**
  * Login for existing user
@@ -51,13 +59,13 @@ import getTagsMutator from '../mutator/axios-instance';
  */
 export const login = (
     loginUserRequestBody: LoginUserRequestBody,
- ) => {
+ options?: SecondParameter<typeof loginMutator>,) => {
       return loginMutator<UserResponseResponse>(
       {url: `/users/login`, method: 'post',
       headers: {'Content-Type': 'application/json', },
       data: loginUserRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -65,13 +73,13 @@ export const login = (
  */
 export const createUser = (
     newUserRequestBody: NewUserRequestBody,
- ) => {
+ options?: SecondParameter<typeof createUserMutator>,) => {
       return createUserMutator<UserResponseResponse>(
       {url: `/users`, method: 'post',
       headers: {'Content-Type': 'application/json', },
       data: newUserRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -80,11 +88,11 @@ export const createUser = (
  */
 export const getCurrentUser = (
     
- ) => {
+ options?: SecondParameter<typeof getCurrentUserMutator>,) => {
       return getCurrentUserMutator<UserResponseResponse>(
       {url: `/user`, method: 'get'
     },
-      );
+      options);
     }
   
 /**
@@ -93,13 +101,13 @@ export const getCurrentUser = (
  */
 export const updateCurrentUser = (
     updateUserRequestBody: UpdateUserRequestBody,
- ) => {
+ options?: SecondParameter<typeof updateCurrentUserMutator>,) => {
       return updateCurrentUserMutator<UserResponseResponse>(
       {url: `/user`, method: 'put',
       headers: {'Content-Type': 'application/json', },
       data: updateUserRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -108,11 +116,11 @@ export const updateCurrentUser = (
  */
 export const getProfileByUsername = (
     username: string,
- ) => {
+ options?: SecondParameter<typeof getProfileByUsernameMutator>,) => {
       return getProfileByUsernameMutator<ProfileResponseResponse>(
       {url: `/profiles/${username}`, method: 'get'
     },
-      );
+      options);
     }
   
 /**
@@ -121,11 +129,11 @@ export const getProfileByUsername = (
  */
 export const followUserByUsername = (
     username: string,
- ) => {
+ options?: SecondParameter<typeof followUserByUsernameMutator>,) => {
       return followUserByUsernameMutator<ProfileResponseResponse>(
       {url: `/profiles/${username}/follow`, method: 'post'
     },
-      );
+      options);
     }
   
 /**
@@ -134,11 +142,11 @@ export const followUserByUsername = (
  */
 export const unfollowUserByUsername = (
     username: string,
- ) => {
+ options?: SecondParameter<typeof unfollowUserByUsernameMutator>,) => {
       return unfollowUserByUsernameMutator<ProfileResponseResponse>(
       {url: `/profiles/${username}/follow`, method: 'delete'
     },
-      );
+      options);
     }
   
 /**
@@ -147,12 +155,12 @@ export const unfollowUserByUsername = (
  */
 export const getArticlesFeed = (
     params?: GetArticlesFeedParams,
- ) => {
+ options?: SecondParameter<typeof getArticlesFeedMutator>,) => {
       return getArticlesFeedMutator<MultipleArticlesResponseResponse>(
       {url: `/articles/feed`, method: 'get',
         params
     },
-      );
+      options);
     }
   
 /**
@@ -161,12 +169,12 @@ export const getArticlesFeed = (
  */
 export const getArticles = (
     params?: GetArticlesParams,
- ) => {
+ options?: SecondParameter<typeof getArticlesMutator>,) => {
       return getArticlesMutator<MultipleArticlesResponseResponse>(
       {url: `/articles`, method: 'get',
         params
     },
-      );
+      options);
     }
   
 /**
@@ -175,13 +183,13 @@ export const getArticles = (
  */
 export const createArticle = (
     newArticleRequestBody: NewArticleRequestBody,
- ) => {
+ options?: SecondParameter<typeof createArticleMutator>,) => {
       return createArticleMutator<SingleArticleResponseResponse>(
       {url: `/articles`, method: 'post',
       headers: {'Content-Type': 'application/json', },
       data: newArticleRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -190,11 +198,11 @@ export const createArticle = (
  */
 export const getArticle = (
     slug: string,
- ) => {
+ options?: SecondParameter<typeof getArticleMutator>,) => {
       return getArticleMutator<SingleArticleResponseResponse>(
       {url: `/articles/${slug}`, method: 'get'
     },
-      );
+      options);
     }
   
 /**
@@ -204,13 +212,13 @@ export const getArticle = (
 export const updateArticle = (
     slug: string,
     updateArticleRequestBody: UpdateArticleRequestBody,
- ) => {
+ options?: SecondParameter<typeof updateArticleMutator>,) => {
       return updateArticleMutator<SingleArticleResponseResponse>(
       {url: `/articles/${slug}`, method: 'put',
       headers: {'Content-Type': 'application/json', },
       data: updateArticleRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -219,11 +227,11 @@ export const updateArticle = (
  */
 export const deleteArticle = (
     slug: string,
- ) => {
+ options?: SecondParameter<typeof deleteArticleMutator>,) => {
       return deleteArticleMutator<EmptyOkResponseResponse>(
       {url: `/articles/${slug}`, method: 'delete'
     },
-      );
+      options);
     }
   
 /**
@@ -232,11 +240,11 @@ export const deleteArticle = (
  */
 export const getArticleComments = (
     slug: string,
- ) => {
+ options?: SecondParameter<typeof getArticleCommentsMutator>,) => {
       return getArticleCommentsMutator<MultipleCommentsResponseResponse>(
       {url: `/articles/${slug}/comments`, method: 'get'
     },
-      );
+      options);
     }
   
 /**
@@ -246,13 +254,13 @@ export const getArticleComments = (
 export const createArticleComment = (
     slug: string,
     newCommentRequestBody: NewCommentRequestBody,
- ) => {
+ options?: SecondParameter<typeof createArticleCommentMutator>,) => {
       return createArticleCommentMutator<SingleCommentResponseResponse>(
       {url: `/articles/${slug}/comments`, method: 'post',
       headers: {'Content-Type': 'application/json', },
       data: newCommentRequestBody
     },
-      );
+      options);
     }
   
 /**
@@ -262,11 +270,11 @@ export const createArticleComment = (
 export const deleteArticleComment = (
     slug: string,
     id: number,
- ) => {
+ options?: SecondParameter<typeof deleteArticleCommentMutator>,) => {
       return deleteArticleCommentMutator<EmptyOkResponseResponse>(
       {url: `/articles/${slug}/comments/${id}`, method: 'delete'
     },
-      );
+      options);
     }
   
 /**
@@ -275,11 +283,11 @@ export const deleteArticleComment = (
  */
 export const createArticleFavorite = (
     slug: string,
- ) => {
+ options?: SecondParameter<typeof createArticleFavoriteMutator>,) => {
       return createArticleFavoriteMutator<SingleArticleResponseResponse>(
       {url: `/articles/${slug}/favorite`, method: 'post'
     },
-      );
+      options);
     }
   
 /**
@@ -288,11 +296,11 @@ export const createArticleFavorite = (
  */
 export const deleteArticleFavorite = (
     slug: string,
- ) => {
+ options?: SecondParameter<typeof deleteArticleFavoriteMutator>,) => {
       return deleteArticleFavoriteMutator<SingleArticleResponseResponse>(
       {url: `/articles/${slug}/favorite`, method: 'delete'
     },
-      );
+      options);
     }
   
 /**
@@ -301,11 +309,11 @@ export const deleteArticleFavorite = (
  */
 export const getTags = (
     
- ) => {
+ options?: SecondParameter<typeof getTagsMutator>,) => {
       return getTagsMutator<TagsResponseResponse>(
       {url: `/tags`, method: 'get'
     },
-      );
+      options);
     }
   
 
