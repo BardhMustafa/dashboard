@@ -9,7 +9,7 @@ import { isTokenExpired } from '@/helpers/tokenValidation';
 import axios from 'axios';
 import { authStore } from '@/store/authStore';
 
-interface JWTTokenData {
+interface AccessToken {
   exp: number;
   iat: number;
   user: {
@@ -23,7 +23,7 @@ const getAccessToken = () => {
   if (!accessToken) {
     return '';
   }
-  const tokenData = jwtDecode(accessToken) as JWTTokenData;
+  const tokenData = jwtDecode(accessToken) as AccessToken;
   if (isTokenExpired(tokenData.exp)) {
     authStore.getState().removeAccessToken();
     return null;
