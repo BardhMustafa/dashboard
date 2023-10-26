@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { styled } from 'styled-components';
-import Header from '@/components/header/Header';
+import Header from 'src/components/header/Header';
 import { StyledComponentProps } from '@mui/material';
 
 export const Container = styled(Box)<StyledComponentProps>`
