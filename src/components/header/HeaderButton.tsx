@@ -5,9 +5,15 @@ type HeaderButtonProps = {
   isHeaderOpen: boolean;
   icon: JSX.Element;
   text: string;
+  onClick: () => void;
 };
 
-const HeaderButton = ({ isHeaderOpen, icon, text }: HeaderButtonProps) => {
+const HeaderButton = ({
+  isHeaderOpen,
+  icon,
+  text,
+  onClick,
+}: HeaderButtonProps) => {
   return (
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
@@ -16,7 +22,7 @@ const HeaderButton = ({ isHeaderOpen, icon, text }: HeaderButtonProps) => {
           justifyContent: isHeaderOpen ? 'initial' : 'center',
           px: 2.5,
         }}
-        onClick={() => {}}
+        onClick={onClick}
       >
         <ListItemIcon
           sx={{

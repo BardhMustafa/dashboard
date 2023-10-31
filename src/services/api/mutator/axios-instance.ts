@@ -1,13 +1,77 @@
+import jwtDecode from 'jwt-decode';
+import Axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+  CancelTokenSource,
+} from 'axios';
+import { authStore } from 'src/store/authStore';
+import { isTokenExpired } from 'src/helpers/tokenValidation';
 
 
-import Axios, { AxiosRequestConfig } from 'axios';
 
+interface AccessToken {
+  exp: number;
+  iat: number;
+  user: {
+    email: string;
+    username: string;
+  };
+}
 
-export const AXIOS_INSTANCE = Axios.create({ baseURL: import.meta.env.VITE_BASE_URL });
-
-export const costumInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
-  const promise = AXIOS_INSTANCE(config).then(({ data }) => data);
-  return promise;
+const accessToken = authStore.getState().accessToken;
+const getAccessToken = () => {
+  if (!accessToken) {
+    return '';
+  }
+  const tokenData = jwtDecode(accessToken) as AccessToken;
+  if (isTokenExpired(tokenData.exp)) {
+    authStore.getState().removeAccessToken();
+    return null;
+  }
+  return `Bearer ${accessToken}`;
 };
 
-export default costumInstance;
+const createApiInstance = () => {
+  const instance = Axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+  });
+
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    instance.defaults.headers.common.Authorization = accessToken;
+  }
+  return instance;
+};
+
+const apiInstance = createApiInstance();
+
+export const setAuthorizationHeaders = (token: string) => {
+  apiInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+
+export  const axiosInstance = <T>(
+  config: AxiosRequestConfig,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<T>> => {
+  const cancelTokenSource: CancelTokenSource = Axios.CancelToken.source();
+
+  const requestConfig: AxiosRequestConfig = {
+    ...config,
+    ...options,
+    cancelToken: cancelTokenSource.token,
+  };
+
+  return apiInstance
+    .request<T, AxiosResponse<T>>(requestConfig)
+    .then((response: AxiosResponse<T>) => {
+      return response;
+    })
+    .catch((error) => {
+      if (error.response.status === 401) {
+        authStore().removeAccessToken();
+        window.location.href = '/login';
+      }
+      throw error;
+    }) as Promise<AxiosResponse<T>>;
+};
+export default axiosInstance;

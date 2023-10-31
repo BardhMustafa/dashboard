@@ -13,9 +13,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { userStore } from '@/store/userStore';
-import HeaderItem, { HeaderItemProps } from './HeaderItem';
+
 import LoginIcon from '@mui/icons-material/Login';
+
+import { authStore } from '../../store/authStore';
+import HeaderItem, { HeaderItemProps } from './HeaderItem';
 import HeaderButton from './HeaderButton';
 
 const DrawerHeader = styled('div')<StyledComponentProps>(({ theme }) => ({
@@ -28,7 +30,7 @@ const DrawerHeader = styled('div')<StyledComponentProps>(({ theme }) => ({
 
 export default function Header() {
   const theme = useTheme();
-  const { isAuthenticated } = userStore();
+  const { isAuthenticated, removeAccessToken } = authStore();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,6 +95,7 @@ export default function Header() {
                 />
               ))}
               <HeaderButton
+                onClick={removeAccessToken}
                 isHeaderOpen={open}
                 icon={<LogoutIcon />}
                 text="Logout"

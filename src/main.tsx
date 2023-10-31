@@ -6,7 +6,6 @@ import { router } from './routes/router';
 import { GlobalStyles } from '@mui/styled-engine';
 import Theme from './shared/theme/Theme';
 
-
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

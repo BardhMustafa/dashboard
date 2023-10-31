@@ -1,14 +1,18 @@
-import { Navigate } from 'react-router';
-import { userStore } from '@/store/userStore';
+import { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router';
+import { authStore } from 'src/store/authStore';
 
 type ProtectedRouteProps = {
   children: JSX.Element;
 };
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = userStore();
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  const { isAuthenticated } = authStore();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
   return children;
 };
 

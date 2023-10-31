@@ -1,14 +1,20 @@
-import { userStore } from '@/store/userStore';
-import { Navigate } from 'react-router';
+import { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router';
+import { authStore } from 'src/store/authStore';
 
 type PrivateRouteProps = {
   children: JSX.Element;
 };
+
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const { isAuthenticated } = userStore();
-  if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  const { isAuthenticated } = authStore();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
   return children;
 };
 
