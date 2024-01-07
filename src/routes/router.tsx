@@ -1,11 +1,11 @@
-import App from '@/App';
 import { createBrowserRouter } from 'react-router-dom';
-import Login from '@/pages/auth/Login';
-import Profile from '@/pages/profile/Profile';
-import NotFound from '@/pages/NotFound';
-import Articles from '@/pages/articles/Articles';
 import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
+import App from 'src/App';
+import Articles from 'src/pages/articles/Articles';
+import Login from 'src/pages/auth/Login';
+import Profile from 'src/pages/profile/Profile';
+import NotFound from 'src/pages/NotFound';
 
 export const router = createBrowserRouter([
   {

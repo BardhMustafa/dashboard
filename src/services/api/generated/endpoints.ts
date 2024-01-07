@@ -5,19 +5,8 @@
  * Conduit API documentation
  * OpenAPI spec version: 1.0.0
  */
-import { useQuery, useMutation } from '@tanstack/react-query';
-import type {
-  UseQueryOptions,
-  UseMutationOptions,
-  QueryFunction,
-  MutationFunction,
-  UseQueryResult,
-  QueryKey,
-} from '@tanstack/react-query';
 import type {
   UserResponseResponse,
-  UnauthorizedResponse,
-  GenericErrorResponse,
   LoginUserRequestBody,
   NewUserRequestBody,
   UpdateUserRequestBody,
@@ -32,8 +21,8 @@ import type {
   MultipleCommentsResponseResponse,
   SingleCommentResponseResponse,
   NewCommentRequestBody,
-  TagsResponseResponse,
-} from './endpoints.schemas';
+  TagsResponseResponse
+} from './endpoints.schemas'
 import loginMutator from '../mutator/axios-instance';
 import createUserMutator from '../mutator/axios-instance';
 import getCurrentUserMutator from '../mutator/axios-instance';
@@ -54,1352 +43,300 @@ import createArticleFavoriteMutator from '../mutator/axios-instance';
 import deleteArticleFavoriteMutator from '../mutator/axios-instance';
 import getTagsMutator from '../mutator/axios-instance';
 
-type AwaitedInput<T> = PromiseLike<T> | T;
 
-type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+// eslint-disable-next-line
+  type SecondParameter<T extends (...args: any) => any> = T extends (
+  config: any,
+  args: infer P,
+) => any
+  ? P
+  : never;
 
-/**
+
+  /**
  * Login for existing user
  * @summary Existing user login
  */
-export const login = (loginUserRequestBody: LoginUserRequestBody) => {
-  return loginMutator<UserResponseResponse>({
-    url: `/users/login`,
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    data: loginUserRequestBody,
-  });
-};
-
-export const getLoginMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof login>>,
-    TError,
-    { data: LoginUserRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof login>>,
-  TError,
-  { data: LoginUserRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof login>>,
-    { data: LoginUserRequestBody }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return login(data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type LoginMutationResult = NonNullable<
-  Awaited<ReturnType<typeof login>>
->;
-export type LoginMutationBody = LoginUserRequestBody;
-export type LoginMutationError = UnauthorizedResponse | GenericErrorResponse;
-
-/**
- * @summary Existing user login
- */
-export const useLogin = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof login>>,
-    TError,
-    { data: LoginUserRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getLoginMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const login = (
+    loginUserRequestBody: LoginUserRequestBody,
+ options?: SecondParameter<typeof loginMutator>,) => {
+      return loginMutator<UserResponseResponse>(
+      {url: `/users/login`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: loginUserRequestBody
+    },
+      options);
+    }
+  
 /**
  * Register a new user
  */
-export const createUser = (newUserRequestBody: NewUserRequestBody) => {
-  return createUserMutator<UserResponseResponse>({
-    url: `/users`,
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    data: newUserRequestBody,
-  });
-};
-
-export const getCreateUserMutationOptions = <
-  TError = GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createUser>>,
-    TError,
-    { data: NewUserRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createUser>>,
-  TError,
-  { data: NewUserRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createUser>>,
-    { data: NewUserRequestBody }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return createUser(data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type CreateUserMutationResult = NonNullable<
-  Awaited<ReturnType<typeof createUser>>
->;
-export type CreateUserMutationBody = NewUserRequestBody;
-export type CreateUserMutationError = GenericErrorResponse;
-
-export const useCreateUser = <
-  TError = GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createUser>>,
-    TError,
-    { data: NewUserRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getCreateUserMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const createUser = (
+    newUserRequestBody: NewUserRequestBody,
+ options?: SecondParameter<typeof createUserMutator>,) => {
+      return createUserMutator<UserResponseResponse>(
+      {url: `/users`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: newUserRequestBody
+    },
+      options);
+    }
+  
 /**
  * Gets the currently logged-in user
  * @summary Get current user
  */
-export const getCurrentUser = (signal?: AbortSignal) => {
-  return getCurrentUserMutator<UserResponseResponse>({
-    url: `/user`,
-    method: 'get',
-    signal,
-  });
-};
-
-export const getGetCurrentUserQueryKey = () => [`/user`] as const;
-
-export const getGetCurrentUserQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getCurrentUser>>,
-    TError,
-    TData
-  >;
-}): UseQueryOptions<
-  Awaited<ReturnType<typeof getCurrentUser>>,
-  TError,
-  TData
-> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({
-    signal,
-  }) => getCurrentUser(signal);
-
-  return { queryKey, queryFn, ...queryOptions };
-};
-
-export type GetCurrentUserQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getCurrentUser>>
->;
-export type GetCurrentUserQueryError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Get current user
- */
-export const useGetCurrentUser = <
-  TData = Awaited<ReturnType<typeof getCurrentUser>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getCurrentUser>>,
-    TError,
-    TData
-  >;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetCurrentUserQueryOptions(options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+export const getCurrentUser = (
+    
+ options?: SecondParameter<typeof getCurrentUserMutator>,) => {
+      return getCurrentUserMutator<UserResponseResponse>(
+      {url: `/user`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Updated user information for current user
  * @summary Update current user
  */
 export const updateCurrentUser = (
-  updateUserRequestBody: UpdateUserRequestBody
-) => {
-  return updateCurrentUserMutator<UserResponseResponse>({
-    url: `/user`,
-    method: 'put',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateUserRequestBody,
-  });
-};
-
-export const getUpdateCurrentUserMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateCurrentUser>>,
-    TError,
-    { data: UpdateUserRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof updateCurrentUser>>,
-  TError,
-  { data: UpdateUserRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof updateCurrentUser>>,
-    { data: UpdateUserRequestBody }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return updateCurrentUser(data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type UpdateCurrentUserMutationResult = NonNullable<
-  Awaited<ReturnType<typeof updateCurrentUser>>
->;
-export type UpdateCurrentUserMutationBody = UpdateUserRequestBody;
-export type UpdateCurrentUserMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Update current user
- */
-export const useUpdateCurrentUser = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateCurrentUser>>,
-    TError,
-    { data: UpdateUserRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getUpdateCurrentUserMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+    updateUserRequestBody: UpdateUserRequestBody,
+ options?: SecondParameter<typeof updateCurrentUserMutator>,) => {
+      return updateCurrentUserMutator<UserResponseResponse>(
+      {url: `/user`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUserRequestBody
+    },
+      options);
+    }
+  
 /**
  * Get a profile of a user of the system. Auth is optional
  * @summary Get a profile
  */
 export const getProfileByUsername = (
-  username: string,
-  signal?: AbortSignal
-) => {
-  return getProfileByUsernameMutator<ProfileResponseResponse>({
-    url: `/profiles/${username}`,
-    method: 'get',
-    signal,
-  });
-};
-
-export const getGetProfileByUsernameQueryKey = (username: string) =>
-  [`/profiles/${username}`] as const;
-
-export const getGetProfileByUsernameQueryOptions = <
-  TData = Awaited<ReturnType<typeof getProfileByUsername>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  username: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProfileByUsername>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryOptions<
-  Awaited<ReturnType<typeof getProfileByUsername>>,
-  TError,
-  TData
-> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetProfileByUsernameQueryKey(username);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getProfileByUsername>>
-  > = ({ signal }) => getProfileByUsername(username, signal);
-
-  return { queryKey, queryFn, enabled: !!username, ...queryOptions };
-};
-
-export type GetProfileByUsernameQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getProfileByUsername>>
->;
-export type GetProfileByUsernameQueryError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Get a profile
- */
-export const useGetProfileByUsername = <
-  TData = Awaited<ReturnType<typeof getProfileByUsername>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  username: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getProfileByUsername>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetProfileByUsernameQueryOptions(username, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+    username: string,
+ options?: SecondParameter<typeof getProfileByUsernameMutator>,) => {
+      return getProfileByUsernameMutator<ProfileResponseResponse>(
+      {url: `/profiles/${username}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Follow a user by username
  * @summary Follow a user
  */
-export const followUserByUsername = (username: string) => {
-  return followUserByUsernameMutator<ProfileResponseResponse>({
-    url: `/profiles/${username}/follow`,
-    method: 'post',
-  });
-};
-
-export const getFollowUserByUsernameMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof followUserByUsername>>,
-    TError,
-    { username: string },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof followUserByUsername>>,
-  TError,
-  { username: string },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof followUserByUsername>>,
-    { username: string }
-  > = (props) => {
-    const { username } = props ?? {};
-
-    return followUserByUsername(username);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type FollowUserByUsernameMutationResult = NonNullable<
-  Awaited<ReturnType<typeof followUserByUsername>>
->;
-
-export type FollowUserByUsernameMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Follow a user
- */
-export const useFollowUserByUsername = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof followUserByUsername>>,
-    TError,
-    { username: string },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getFollowUserByUsernameMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const followUserByUsername = (
+    username: string,
+ options?: SecondParameter<typeof followUserByUsernameMutator>,) => {
+      return followUserByUsernameMutator<ProfileResponseResponse>(
+      {url: `/profiles/${username}/follow`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Unfollow a user by username
  * @summary Unfollow a user
  */
-export const unfollowUserByUsername = (username: string) => {
-  return unfollowUserByUsernameMutator<ProfileResponseResponse>({
-    url: `/profiles/${username}/follow`,
-    method: 'delete',
-  });
-};
-
-export const getUnfollowUserByUsernameMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof unfollowUserByUsername>>,
-    TError,
-    { username: string },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof unfollowUserByUsername>>,
-  TError,
-  { username: string },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof unfollowUserByUsername>>,
-    { username: string }
-  > = (props) => {
-    const { username } = props ?? {};
-
-    return unfollowUserByUsername(username);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type UnfollowUserByUsernameMutationResult = NonNullable<
-  Awaited<ReturnType<typeof unfollowUserByUsername>>
->;
-
-export type UnfollowUserByUsernameMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Unfollow a user
- */
-export const useUnfollowUserByUsername = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof unfollowUserByUsername>>,
-    TError,
-    { username: string },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getUnfollowUserByUsernameMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const unfollowUserByUsername = (
+    username: string,
+ options?: SecondParameter<typeof unfollowUserByUsernameMutator>,) => {
+      return unfollowUserByUsernameMutator<ProfileResponseResponse>(
+      {url: `/profiles/${username}/follow`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Get most recent articles from users you follow. Use query parameters to limit. Auth is required
  * @summary Get recent articles from users you follow
  */
 export const getArticlesFeed = (
-  params?: GetArticlesFeedParams,
-  signal?: AbortSignal
-) => {
-  return getArticlesFeedMutator<MultipleArticlesResponseResponse>({
-    url: `/articles/feed`,
-    method: 'get',
-    params,
-    signal,
-  });
-};
-
-export const getGetArticlesFeedQueryKey = (params?: GetArticlesFeedParams) =>
-  [`/articles/feed`, ...(params ? [params] : [])] as const;
-
-export const getGetArticlesFeedQueryOptions = <
-  TData = Awaited<ReturnType<typeof getArticlesFeed>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  params?: GetArticlesFeedParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticlesFeed>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryOptions<
-  Awaited<ReturnType<typeof getArticlesFeed>>,
-  TError,
-  TData
-> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetArticlesFeedQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getArticlesFeed>>> = ({
-    signal,
-  }) => getArticlesFeed(params, signal);
-
-  return { queryKey, queryFn, ...queryOptions };
-};
-
-export type GetArticlesFeedQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getArticlesFeed>>
->;
-export type GetArticlesFeedQueryError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Get recent articles from users you follow
- */
-export const useGetArticlesFeed = <
-  TData = Awaited<ReturnType<typeof getArticlesFeed>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  params?: GetArticlesFeedParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticlesFeed>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetArticlesFeedQueryOptions(params, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+    params?: GetArticlesFeedParams,
+ options?: SecondParameter<typeof getArticlesFeedMutator>,) => {
+      return getArticlesFeedMutator<MultipleArticlesResponseResponse>(
+      {url: `/articles/feed`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Get most recent articles globally. Use query parameters to filter results. Auth is optional
  * @summary Get recent articles globally
  */
 export const getArticles = (
-  params?: GetArticlesParams,
-  signal?: AbortSignal
-) => {
-  return getArticlesMutator<MultipleArticlesResponseResponse>({
-    url: `/articles`,
-    method: 'get',
-    params,
-    signal,
-  });
-};
-
-export const getGetArticlesQueryKey = (params?: GetArticlesParams) =>
-  [`/articles`, ...(params ? [params] : [])] as const;
-
-export const getGetArticlesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getArticles>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  params?: GetArticlesParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticles>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryOptions<Awaited<ReturnType<typeof getArticles>>, TError, TData> & {
-  queryKey: QueryKey;
-} => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetArticlesQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getArticles>>> = ({
-    signal,
-  }) => getArticles(params, signal);
-
-  return { queryKey, queryFn, ...queryOptions };
-};
-
-export type GetArticlesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getArticles>>
->;
-export type GetArticlesQueryError = UnauthorizedResponse | GenericErrorResponse;
-
-/**
- * @summary Get recent articles globally
- */
-export const useGetArticles = <
-  TData = Awaited<ReturnType<typeof getArticles>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  params?: GetArticlesParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticles>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetArticlesQueryOptions(params, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+    params?: GetArticlesParams,
+ options?: SecondParameter<typeof getArticlesMutator>,) => {
+      return getArticlesMutator<MultipleArticlesResponseResponse>(
+      {url: `/articles`, method: 'get',
+        params
+    },
+      options);
+    }
+  
 /**
  * Create an article. Auth is required
  * @summary Create an article
  */
-export const createArticle = (newArticleRequestBody: NewArticleRequestBody) => {
-  return createArticleMutator<SingleArticleResponseResponse>({
-    url: `/articles`,
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    data: newArticleRequestBody,
-  });
-};
-
-export const getCreateArticleMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticle>>,
-    TError,
-    { data: NewArticleRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createArticle>>,
-  TError,
-  { data: NewArticleRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createArticle>>,
-    { data: NewArticleRequestBody }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return createArticle(data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type CreateArticleMutationResult = NonNullable<
-  Awaited<ReturnType<typeof createArticle>>
->;
-export type CreateArticleMutationBody = NewArticleRequestBody;
-export type CreateArticleMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Create an article
- */
-export const useCreateArticle = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticle>>,
-    TError,
-    { data: NewArticleRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getCreateArticleMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const createArticle = (
+    newArticleRequestBody: NewArticleRequestBody,
+ options?: SecondParameter<typeof createArticleMutator>,) => {
+      return createArticleMutator<SingleArticleResponseResponse>(
+      {url: `/articles`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: newArticleRequestBody
+    },
+      options);
+    }
+  
 /**
  * Get an article. Auth not required
  * @summary Get an article
  */
-export const getArticle = (slug: string, signal?: AbortSignal) => {
-  return getArticleMutator<SingleArticleResponseResponse>({
-    url: `/articles/${slug}`,
-    method: 'get',
-    signal,
-  });
-};
-
-export const getGetArticleQueryKey = (slug: string) =>
-  [`/articles/${slug}`] as const;
-
-export const getGetArticleQueryOptions = <
-  TData = Awaited<ReturnType<typeof getArticle>>,
-  TError = GenericErrorResponse
->(
-  slug: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticle>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryOptions<Awaited<ReturnType<typeof getArticle>>, TError, TData> & {
-  queryKey: QueryKey;
-} => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetArticleQueryKey(slug);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getArticle>>> = ({
-    signal,
-  }) => getArticle(slug, signal);
-
-  return { queryKey, queryFn, enabled: !!slug, ...queryOptions };
-};
-
-export type GetArticleQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getArticle>>
->;
-export type GetArticleQueryError = GenericErrorResponse;
-
-/**
- * @summary Get an article
- */
-export const useGetArticle = <
-  TData = Awaited<ReturnType<typeof getArticle>>,
-  TError = GenericErrorResponse
->(
-  slug: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticle>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetArticleQueryOptions(slug, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+export const getArticle = (
+    slug: string,
+ options?: SecondParameter<typeof getArticleMutator>,) => {
+      return getArticleMutator<SingleArticleResponseResponse>(
+      {url: `/articles/${slug}`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Update an article. Auth is required
  * @summary Update an article
  */
 export const updateArticle = (
-  slug: string,
-  updateArticleRequestBody: UpdateArticleRequestBody
-) => {
-  return updateArticleMutator<SingleArticleResponseResponse>({
-    url: `/articles/${slug}`,
-    method: 'put',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateArticleRequestBody,
-  });
-};
-
-export const getUpdateArticleMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateArticle>>,
-    TError,
-    { slug: string; data: UpdateArticleRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof updateArticle>>,
-  TError,
-  { slug: string; data: UpdateArticleRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof updateArticle>>,
-    { slug: string; data: UpdateArticleRequestBody }
-  > = (props) => {
-    const { slug, data } = props ?? {};
-
-    return updateArticle(slug, data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type UpdateArticleMutationResult = NonNullable<
-  Awaited<ReturnType<typeof updateArticle>>
->;
-export type UpdateArticleMutationBody = UpdateArticleRequestBody;
-export type UpdateArticleMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Update an article
- */
-export const useUpdateArticle = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof updateArticle>>,
-    TError,
-    { slug: string; data: UpdateArticleRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getUpdateArticleMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+    slug: string,
+    updateArticleRequestBody: UpdateArticleRequestBody,
+ options?: SecondParameter<typeof updateArticleMutator>,) => {
+      return updateArticleMutator<SingleArticleResponseResponse>(
+      {url: `/articles/${slug}`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateArticleRequestBody
+    },
+      options);
+    }
+  
 /**
  * Delete an article. Auth is required
  * @summary Delete an article
  */
-export const deleteArticle = (slug: string) => {
-  return deleteArticleMutator<EmptyOkResponseResponse>({
-    url: `/articles/${slug}`,
-    method: 'delete',
-  });
-};
-
-export const getDeleteArticleMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticle>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteArticle>>,
-  TError,
-  { slug: string },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteArticle>>,
-    { slug: string }
-  > = (props) => {
-    const { slug } = props ?? {};
-
-    return deleteArticle(slug);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type DeleteArticleMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteArticle>>
->;
-
-export type DeleteArticleMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Delete an article
- */
-export const useDeleteArticle = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticle>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getDeleteArticleMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const deleteArticle = (
+    slug: string,
+ options?: SecondParameter<typeof deleteArticleMutator>,) => {
+      return deleteArticleMutator<EmptyOkResponseResponse>(
+      {url: `/articles/${slug}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Get the comments for an article. Auth is optional
  * @summary Get comments for an article
  */
-export const getArticleComments = (slug: string, signal?: AbortSignal) => {
-  return getArticleCommentsMutator<MultipleCommentsResponseResponse>({
-    url: `/articles/${slug}/comments`,
-    method: 'get',
-    signal,
-  });
-};
-
-export const getGetArticleCommentsQueryKey = (slug: string) =>
-  [`/articles/${slug}/comments`] as const;
-
-export const getGetArticleCommentsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getArticleComments>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  slug: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticleComments>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryOptions<
-  Awaited<ReturnType<typeof getArticleComments>>,
-  TError,
-  TData
-> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetArticleCommentsQueryKey(slug);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getArticleComments>>
-  > = ({ signal }) => getArticleComments(slug, signal);
-
-  return { queryKey, queryFn, enabled: !!slug, ...queryOptions };
-};
-
-export type GetArticleCommentsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getArticleComments>>
->;
-export type GetArticleCommentsQueryError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Get comments for an article
- */
-export const useGetArticleComments = <
-  TData = Awaited<ReturnType<typeof getArticleComments>>,
-  TError = UnauthorizedResponse | GenericErrorResponse
->(
-  slug: string,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getArticleComments>>,
-      TError,
-      TData
-    >;
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetArticleCommentsQueryOptions(slug, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
+export const getArticleComments = (
+    slug: string,
+ options?: SecondParameter<typeof getArticleCommentsMutator>,) => {
+      return getArticleCommentsMutator<MultipleCommentsResponseResponse>(
+      {url: `/articles/${slug}/comments`, method: 'get'
+    },
+      options);
+    }
+  
 /**
  * Create a comment for an article. Auth is required
  * @summary Create a comment for an article
  */
 export const createArticleComment = (
-  slug: string,
-  newCommentRequestBody: NewCommentRequestBody
-) => {
-  return createArticleCommentMutator<SingleCommentResponseResponse>({
-    url: `/articles/${slug}/comments`,
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    data: newCommentRequestBody,
-  });
-};
-
-export const getCreateArticleCommentMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticleComment>>,
-    TError,
-    { slug: string; data: NewCommentRequestBody },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createArticleComment>>,
-  TError,
-  { slug: string; data: NewCommentRequestBody },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createArticleComment>>,
-    { slug: string; data: NewCommentRequestBody }
-  > = (props) => {
-    const { slug, data } = props ?? {};
-
-    return createArticleComment(slug, data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type CreateArticleCommentMutationResult = NonNullable<
-  Awaited<ReturnType<typeof createArticleComment>>
->;
-export type CreateArticleCommentMutationBody = NewCommentRequestBody;
-export type CreateArticleCommentMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Create a comment for an article
- */
-export const useCreateArticleComment = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticleComment>>,
-    TError,
-    { slug: string; data: NewCommentRequestBody },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getCreateArticleCommentMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+    slug: string,
+    newCommentRequestBody: NewCommentRequestBody,
+ options?: SecondParameter<typeof createArticleCommentMutator>,) => {
+      return createArticleCommentMutator<SingleCommentResponseResponse>(
+      {url: `/articles/${slug}/comments`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: newCommentRequestBody
+    },
+      options);
+    }
+  
 /**
  * Delete a comment for an article. Auth is required
  * @summary Delete a comment for an article
  */
-export const deleteArticleComment = (slug: string, id: number) => {
-  return deleteArticleCommentMutator<EmptyOkResponseResponse>({
-    url: `/articles/${slug}/comments/${id}`,
-    method: 'delete',
-  });
-};
-
-export const getDeleteArticleCommentMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticleComment>>,
-    TError,
-    { slug: string; id: number },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteArticleComment>>,
-  TError,
-  { slug: string; id: number },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteArticleComment>>,
-    { slug: string; id: number }
-  > = (props) => {
-    const { slug, id } = props ?? {};
-
-    return deleteArticleComment(slug, id);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type DeleteArticleCommentMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteArticleComment>>
->;
-
-export type DeleteArticleCommentMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Delete a comment for an article
- */
-export const useDeleteArticleComment = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticleComment>>,
-    TError,
-    { slug: string; id: number },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getDeleteArticleCommentMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const deleteArticleComment = (
+    slug: string,
+    id: number,
+ options?: SecondParameter<typeof deleteArticleCommentMutator>,) => {
+      return deleteArticleCommentMutator<EmptyOkResponseResponse>(
+      {url: `/articles/${slug}/comments/${id}`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Favorite an article. Auth is required
  * @summary Favorite an article
  */
-export const createArticleFavorite = (slug: string) => {
-  return createArticleFavoriteMutator<SingleArticleResponseResponse>({
-    url: `/articles/${slug}/favorite`,
-    method: 'post',
-  });
-};
-
-export const getCreateArticleFavoriteMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticleFavorite>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof createArticleFavorite>>,
-  TError,
-  { slug: string },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof createArticleFavorite>>,
-    { slug: string }
-  > = (props) => {
-    const { slug } = props ?? {};
-
-    return createArticleFavorite(slug);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type CreateArticleFavoriteMutationResult = NonNullable<
-  Awaited<ReturnType<typeof createArticleFavorite>>
->;
-
-export type CreateArticleFavoriteMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Favorite an article
- */
-export const useCreateArticleFavorite = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof createArticleFavorite>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getCreateArticleFavoriteMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const createArticleFavorite = (
+    slug: string,
+ options?: SecondParameter<typeof createArticleFavoriteMutator>,) => {
+      return createArticleFavoriteMutator<SingleArticleResponseResponse>(
+      {url: `/articles/${slug}/favorite`, method: 'post'
+    },
+      options);
+    }
+  
 /**
  * Unfavorite an article. Auth is required
  * @summary Unfavorite an article
  */
-export const deleteArticleFavorite = (slug: string) => {
-  return deleteArticleFavoriteMutator<SingleArticleResponseResponse>({
-    url: `/articles/${slug}/favorite`,
-    method: 'delete',
-  });
-};
-
-export const getDeleteArticleFavoriteMutationOptions = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticleFavorite>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteArticleFavorite>>,
-  TError,
-  { slug: string },
-  TContext
-> => {
-  const { mutation: mutationOptions } = options ?? {};
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteArticleFavorite>>,
-    { slug: string }
-  > = (props) => {
-    const { slug } = props ?? {};
-
-    return deleteArticleFavorite(slug);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type DeleteArticleFavoriteMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteArticleFavorite>>
->;
-
-export type DeleteArticleFavoriteMutationError =
-  | UnauthorizedResponse
-  | GenericErrorResponse;
-
-/**
- * @summary Unfavorite an article
- */
-export const useDeleteArticleFavorite = <
-  TError = UnauthorizedResponse | GenericErrorResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteArticleFavorite>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-}) => {
-  const mutationOptions = getDeleteArticleFavoriteMutationOptions(options);
-
-  return useMutation(mutationOptions);
-};
-
+export const deleteArticleFavorite = (
+    slug: string,
+ options?: SecondParameter<typeof deleteArticleFavoriteMutator>,) => {
+      return deleteArticleFavoriteMutator<SingleArticleResponseResponse>(
+      {url: `/articles/${slug}/favorite`, method: 'delete'
+    },
+      options);
+    }
+  
 /**
  * Get tags. Auth not required
  * @summary Get tags
  */
-export const getTags = (signal?: AbortSignal) => {
-  return getTagsMutator<TagsResponseResponse>({
-    url: `/tags`,
-    method: 'get',
-    signal,
-  });
-};
+export const getTags = (
+    
+ options?: SecondParameter<typeof getTagsMutator>,) => {
+      return getTagsMutator<TagsResponseResponse>(
+      {url: `/tags`, method: 'get'
+    },
+      options);
+    }
+  
 
-export const getGetTagsQueryKey = () => [`/tags`] as const;
+type AwaitedInput<T> = PromiseLike<T> | T;
 
-export const getGetTagsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getTags>>,
-  TError = GenericErrorResponse
->(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof getTags>>, TError, TData>;
-}): UseQueryOptions<Awaited<ReturnType<typeof getTags>>, TError, TData> & {
-  queryKey: QueryKey;
-} => {
-  const { query: queryOptions } = options ?? {};
+    type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
-  const queryKey = queryOptions?.queryKey ?? getGetTagsQueryKey();
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTags>>> = ({
-    signal,
-  }) => getTags(signal);
-
-  return { queryKey, queryFn, ...queryOptions };
-};
-
-export type GetTagsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getTags>>
->;
-export type GetTagsQueryError = GenericErrorResponse;
-
-/**
- * @summary Get tags
- */
-export const useGetTags = <
-  TData = Awaited<ReturnType<typeof getTags>>,
-  TError = GenericErrorResponse
->(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof getTags>>, TError, TData>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetTagsQueryOptions(options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
+export type LoginResult = NonNullable<Awaited<ReturnType<typeof login>>>
+export type CreateUserResult = NonNullable<Awaited<ReturnType<typeof createUser>>>
+export type GetCurrentUserResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
+export type UpdateCurrentUserResult = NonNullable<Awaited<ReturnType<typeof updateCurrentUser>>>
+export type GetProfileByUsernameResult = NonNullable<Awaited<ReturnType<typeof getProfileByUsername>>>
+export type FollowUserByUsernameResult = NonNullable<Awaited<ReturnType<typeof followUserByUsername>>>
+export type UnfollowUserByUsernameResult = NonNullable<Awaited<ReturnType<typeof unfollowUserByUsername>>>
+export type GetArticlesFeedResult = NonNullable<Awaited<ReturnType<typeof getArticlesFeed>>>
+export type GetArticlesResult = NonNullable<Awaited<ReturnType<typeof getArticles>>>
+export type CreateArticleResult = NonNullable<Awaited<ReturnType<typeof createArticle>>>
+export type GetArticleResult = NonNullable<Awaited<ReturnType<typeof getArticle>>>
+export type UpdateArticleResult = NonNullable<Awaited<ReturnType<typeof updateArticle>>>
+export type DeleteArticleResult = NonNullable<Awaited<ReturnType<typeof deleteArticle>>>
+export type GetArticleCommentsResult = NonNullable<Awaited<ReturnType<typeof getArticleComments>>>
+export type CreateArticleCommentResult = NonNullable<Awaited<ReturnType<typeof createArticleComment>>>
+export type DeleteArticleCommentResult = NonNullable<Awaited<ReturnType<typeof deleteArticleComment>>>
+export type CreateArticleFavoriteResult = NonNullable<Awaited<ReturnType<typeof createArticleFavorite>>>
+export type DeleteArticleFavoriteResult = NonNullable<Awaited<ReturnType<typeof deleteArticleFavorite>>>
+export type GetTagsResult = NonNullable<Awaited<ReturnType<typeof getTags>>>

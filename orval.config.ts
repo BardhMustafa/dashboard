@@ -6,7 +6,6 @@ export default defineConfig({
     output: { target: './src/services/api/generated/endpoints.ts' ,
     prettier:true,
     mode:'split',
-    client:'react-query',
     override:{
         mutator:'./src/services/api/mutator/axios-instance.ts'
     }
