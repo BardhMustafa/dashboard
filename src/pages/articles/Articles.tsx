@@ -1,13 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useCallback } from 'react';
 import BackDropLoader from 'src/components/common/BackDropLoader';
-import {
-  getArticles,
-  GetArticlesParams,
-} from 'src/services/api/generated/endpoints';
+import { getArticles } from 'src/services/api/generated/endpoints';
 import MainContainer from 'src/shared/MainContainer';
 import { ArticlesContainer } from './Articles.styles';
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -16,7 +14,10 @@ import {
   Typography,
 } from '@mui/material';
 import ArticleCard from 'src/components/card/ArticleCard';
-import { Article } from 'src/services/api/generated/endpoints.schemas';
+import {
+  Article,
+  GetArticlesParams,
+} from 'src/services/api/generated/endpoints.schemas';
 // ... (previous imports)
 const Articles = () => {
   const fetchArticles = async ({ pageParam = 1 }: { pageParam?: number }) => {
@@ -31,9 +32,9 @@ const Articles = () => {
   const {
     data,
     fetchNextPage,
+    isInitialLoading,
     hasNextPage,
     isFetching,
-    isError,
     isFetchingNextPage,
   } = useInfiniteQuery(['articles'], fetchArticles, {
     getNextPageParam: (lastPage) => {
@@ -41,8 +42,8 @@ const Articles = () => {
         lastPage.articles.length > 0 ? lastPage.articles.length / 10 + 1 : null;
       return nextPage;
     },
+    keepPreviousData: true,
   });
-  console.log('🚀 ~ Articles ~ isLoading:', isFetching);
 
   const handleLoadMore = useCallback(() => {
     fetchNextPage();
@@ -50,7 +51,7 @@ const Articles = () => {
 
   return (
     <MainContainer>
-      {isFetching ? (
+      {isInitialLoading ? (
         <BackDropLoader open={isFetching} />
       ) : (
         <Grid
@@ -66,9 +67,11 @@ const Articles = () => {
         </Grid>
       )}
       {hasNextPage && (
-        <Button onClick={handleLoadMore} disabled={isFetching}>
-          {isFetchingNextPage ? 'Loading...' : 'Load More'}
-        </Button>
+        <Box padding={1}>
+          <Button onClick={handleLoadMore} disabled={isFetching}>
+            {isFetchingNextPage ? 'Loading...' : 'Load More'}
+          </Button>
+        </Box>
       )}
     </MainContainer>
   );
