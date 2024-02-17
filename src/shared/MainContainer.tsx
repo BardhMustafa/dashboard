@@ -6,11 +6,13 @@ import { StyledComponentProps } from '@mui/material';
 
 export const Container = styled(Box)<StyledComponentProps>`
   margin-left: ${({ theme }) => `calc(${theme.spacing(7)})`};
+  margin-top: ${({ theme }) => theme.spacing(8)};
   min-height: calc(100vh - 80px);
   padding: ${({ theme }) => theme.spacing(3)};
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 const MainContainer = ({ children }: { children?: React.ReactNode }) => {
   return (
