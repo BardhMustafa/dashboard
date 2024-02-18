@@ -1,15 +1,23 @@
-import { Modal } from '@mui/material';
-
+import { Box, Modal } from '@mui/material';
 
 type ModalProps = {
   open: boolean;
-  onClose: ()=> void;
+  onClose: () => void;
   children: JSX.Element;
 };
 const ModalComponent = ({ open, onClose, children }: ModalProps) => {
-  return <Modal open={open} onClose={onClose}>
-    {children}
-  </Modal>;
+  return (
+    <Modal open={open} onClose={onClose}>
+      <Box
+        bgcolor="white"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        {children}
+      </Box>
+    </Modal>
+  );
 };
 
 export default ModalComponent;
