@@ -1,4 +1,3 @@
-import MainContainer from '@/shared/MainContainer';
 import { Backdrop, CircularProgress } from '@mui/material';
 import React from 'react';
 

@@ -34,6 +34,7 @@ const Login = () => {
     onSuccess: (response) => {
       setAccessToken(response.data.user.token);
       setAuthorizationHeaders(response.data.user.token);
+      navigate('/dashboard');
     },
     onError: (error) => {
       const errorResponse = error as any;
@@ -57,7 +58,6 @@ const Login = () => {
         password: values.password,
       };
       mutate({ user });
-      navigate('/dashboard');
     },
   });
   return (
